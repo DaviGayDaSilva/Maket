@@ -28,9 +28,6 @@ install -m 755 "${SCRIPT_DIR}/bin/maket" "${INSTALL_DIR}/maket"
 echo "Installing lib/maket-lib.sh..."
 install -m 644 "${SCRIPT_DIR}/lib/maket-lib.sh" "${LIB_DIR}/maket-lib.sh"
 
-# Create symlinks
-ln -sf "${INSTALL_DIR}/maket" "${TERMUX_PREFIX}/bin/maket"
-
 # Make executable
 chmod +x "${INSTALL_DIR}/maket"
 
