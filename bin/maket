@@ -127,9 +127,18 @@ parse_args() {
     
     # Handle target as ISO or rootfs
     if [[ -n "$TARGET" ]]; then
-        if [[ "$TARGET" =~ \.iso$ ]]; then
-            ISO_FILE="$TARGET"
+        # First check if file exists as given
+        if [[ -f "$TARGET" ]]; then
+            if [[ "$TARGET" =~ \.iso$ ]]; then
+                ISO_FILE="$TARGET"
+            else
+                ROOTFS_DIR="$TARGET"
+            fi
+        # Try to find ISO file
+        elif [[ -n "$(find_iso "$TARGET" 2>/dev/null)" ]]; then
+            ISO_FILE="$(find_iso "$TARGET")"
         else
+            # Assume it's a rootfs directory
             ROOTFS_DIR="$TARGET"
         fi
     fi

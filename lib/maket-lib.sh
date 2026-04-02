@@ -58,6 +58,7 @@ install_dependencies() {
 find_iso() {
     local iso_name="$1"
     local search_paths=(
+        "${HOME}"
         "${HOME}/storage/shared"
         "${HOME}/storage/downloads"
         "${HOME}/storage/shared/ISO"
@@ -70,21 +71,19 @@ find_iso() {
             echo "${path}/${iso_name}"
             return 0
         fi
-        if [[ -f "${path^^}/${iso_name}" ]]; then  # Case insensitive
-            echo "${path^^}/${iso_name}"
+        if [[ -f "${path}/${iso_name}.iso" ]]; then
+            echo "${path}/${iso_name}.iso"
             return 0
         fi
     done
     
-    # Search recursively
-    for path in "${search_paths[@]}"; do
-        local result
-        result=$(find "${path}" -maxdepth 3 -name "*${iso_name}*" -type f 2>/dev/null | head -1)
-        if [[ -n "${result}" ]]; then
-            echo "${result}"
-            return 0
-        fi
-    done
+    # Search recursively in home directory
+    local result
+    result=$(find "${HOME}" -maxdepth 3 -iname "*${iso_name}*" -type f 2>/dev/null | head -1)
+    if [[ -n "${result}" ]]; then
+        echo "${result}"
+        return 0
+    fi
     
     return 1
 }
